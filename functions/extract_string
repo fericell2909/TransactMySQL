@@ -1,0 +1,14 @@
+DELIMITER $$
+USE `example_scripts_mysql`$$
+DROP FUNCTION IF EXISTS `extract_string`$$
+CREATE DEFINER=`root`@`localhost` 
+FUNCTION `extract_string`(
+_x TEXT,
+_delim VARCHAR(12),
+_pos INT
+) RETURNS TEXT CHARSET utf8
+                DETERMINISTIC
+BEGIN
+        RETURN REPLACE(SUBSTRING(SUBSTRING_INDEX(_x, _delim, _pos), CHAR_LENGTH(SUBSTRING_INDEX(_x, _delim, _pos -1)) + 1), _delim, '');
+END$$
+DELIMITER ;

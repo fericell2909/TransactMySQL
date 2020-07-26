@@ -1,0 +1,25 @@
+DELIMITER $$
+
+USE `erpuniversity`$$
+
+DROP FUNCTION IF EXISTS `UpperCaseWords`$$
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `UpperCaseWords`(cadena VARCHAR(100)) RETURNS VARCHAR(100) CHARSET utf8
+BEGIN 
+
+DECLARE pos INT DEFAULT 0; 
+DECLARE tmp VARCHAR(100) DEFAULT ''; 
+DECLARE result VARCHAR(100) DEFAULT ''; 
+REPEAT SET pos = LOCATE(' ', cadena); 
+ IF pos = 0 THEN SET pos = CHAR_LENGTH(cadena); 
+ END IF; 
+ SET tmp = LEFT(cadena,pos); 
+ SET result = CONCAT(result, UPPER(LEFT(tmp,1)),SUBSTR(tmp,2)); 
+ SET cadena = RIGHT(cadena,CHAR_LENGTH(cadena)-pos); 
+UNTIL CHAR_LENGTH(cadena) = 0 END REPEAT; 
+
+RETURN result; 
+
+END$$
+
+DELIMITER ;
