@@ -38,3 +38,5 @@
                select UpperCaseWords('marco estrada lopez');
 
                Result is equal : Marco Estrada Lopez  
+
+### More functions
