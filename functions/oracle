@@ -1,0 +1,36 @@
+CREATE OR REPLACE FUNCTION extract_string (
+    p_text   IN VARCHAR2,
+    p_delim  IN VARCHAR2,
+    p_pos    IN INTEGER
+) RETURN VARCHAR2 IS
+    v_start  PLS_INTEGER := 1;
+    v_end    PLS_INTEGER;
+    v_count  PLS_INTEGER := 1;
+    v_temp   VARCHAR2(32767) := p_text;
+    v_result VARCHAR2(32767);
+BEGIN
+    LOOP
+        v_end := INSTR(v_temp, p_delim, v_start);
+
+        IF v_count = p_pos THEN
+            IF v_end = 0 THEN
+                v_result := SUBSTR(v_temp, v_start);
+            ELSE
+                v_result := SUBSTR(v_temp, v_start, v_end - v_start);
+            END IF;
+            RETURN v_result;
+        END IF;
+
+        EXIT WHEN v_end = 0;
+        v_start := v_end + LENGTH(p_delim);
+        v_count := v_count + 1;
+    END LOOP;
+
+    -- Si la posición buscada es la última y no tiene delimitador al final
+    IF v_count = p_pos THEN
+        RETURN SUBSTR(v_temp, v_start);
+    END IF;
+
+    RETURN NULL;
+END;
+/
